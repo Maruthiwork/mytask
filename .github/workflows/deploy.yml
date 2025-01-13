@@ -15,19 +15,16 @@ jobs:
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
-        with:
-          version: 'latest'
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          credentials: ${{ secrets.GCP_SA_KEY }}
-
-      - name: Set up gcloud authentication
+        - name: Set up SSH key
         run: |
-          echo "${{ secrets.GCP_SA_KEY }}" > $HOME/gcloud-service-key.json
-           cat $HOME/gcloud-service-key.json 
-          gcloud auth activate-service-account --key-file=$HOME/gcloud-service-key.json
-          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcloud-service-key.json
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H your-vm-ip >> ~/.ssh/known_hosts 
+
+      - name: SSH to VM and execute commands
+        run: |
+          ssh -o StrictHostKeyChecking=maruthiwork0009@34.47.252.241
 
     # - name: Authenticate to GCP
      #   run: echo "${{ secrets.GCP_SA_KEY }}" > /home/gcloud-service-key.json
