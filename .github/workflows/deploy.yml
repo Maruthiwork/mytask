@@ -19,12 +19,12 @@ jobs:
           version: 'latest'
 
       - name: Authenticate to GCP
-        run: echo "${{ secrets.GCP_SA_KEY }}" > ${HOME}/gcloud-service-key.json
+        run: echo "${{ secrets.GCP_SA_KEY }}" > /home/gcloud-service-key.json
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
       - name: Set up gcloud authentication
-        run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+        run: gcloud auth activate-service-account --key-file=/home/gcloud-service-key.json
 
       - name: Set GCP project
         run: gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
