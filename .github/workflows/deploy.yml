@@ -1,5 +1,4 @@
 name: Deploy Hello World HTML to GCP VM
-
 on:
   push:
     branches:
@@ -21,7 +20,7 @@ jobs:
 
       - name: SSH to VM and execute commands
         run: |
-          ssh -o StrictHostKeyChecking=maruthiwork0009@34.47.252.241
+          ssh -o StrictHostKeyChecking=no maruthiwork0009@34.47.252.241
       - name: Deploy Hello World HTML to GCP VM
         run: |
           # SSH into the VM and copy the HTML file
