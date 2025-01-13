@@ -33,10 +33,11 @@ jobs:
         run: |
           # SSH into the VM and copy the HTML file
           gcloud compute ssh --project ${{ secrets.GCP_PROJECT_ID }} --zone us-central1-a --tunnel-through-iap --ssh-flag="-o StrictHostKeyChecking=no" ${{ secrets.GCP_VM_IP }} << 'EOF'
+            sudo mkdir maruthi
             # Navigate to the web server directory (e.g., /var/www/html/)
-            sudo mkdir -p /var/www/html/
-            sudo cp /home/$(whoami)/index.html /var/www/html/index.html
+            #sudo mkdir -p /var/www/html/
+            #sudo cp /home/$(whoami)/index.html /var/www/html/index.html
             # Make sure the permissions are correct for the web server to serve the file
-            sudo chown www-data:www-data /var/www/html/index.html
-            sudo chmod 644 /var/www/html/index.html
+            #sudo chown www-data:www-data /var/www/html/index.html
+            #sudo chmod 644 /var/www/html/index.html
           EOF
