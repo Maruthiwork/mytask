@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Trigger action on commits to the 'main' branch
       
-  jobs:
+jobs:
   deploy:
     runs-on: ubuntu-latest 
     steps:
