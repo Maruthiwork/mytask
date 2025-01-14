@@ -3,7 +3,7 @@ name: Deploy to GCP VM using Docker Compose
 on:
   push:
     branches:
-      - master  # You can replace with any branch you want to trigger on
+      - main  # You can replace with any branch you want to trigger on
 
 jobs:
   deploy:
