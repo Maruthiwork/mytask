@@ -1,13 +1,9 @@
-version: '3.7'
+version: "3.9" # Use a compatible version
 
 services:
   web:
     build: .
     ports:
-      - "80:80"
-    networks:
-      - webnet
-
-networks:
-  webnet:
-    driver: bridge
+      - "80:80" # Map host port 80 to container port 80
+    volumes:
+      - ./:/usr/share/nginx/html:ro # Mount your application files
