@@ -28,13 +28,13 @@ jobs:
           #ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} 
          
             # Navigate to your project directory
-            cd /home/maruthiwork0009/task/
+            cd /home/maruthiwork0009/task
           
             # Pull the latest changes from Git
            # git pull origin main
 
             # Pull Docker images and restart containers
-           docker compose up
+           docker compose up -d
 
           #echo "Docker Compose deployment completed."
           EOF
