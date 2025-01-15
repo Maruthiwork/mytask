@@ -1,5 +1,5 @@
-# Use an official Nginx image from the Docker Hub
-FROM nginx:alpine
+FROM nginx:latest
 
-# Copy the HTML file into the default Nginx directory
-COPY ./index.html /usr/share/nginx/html/index.html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
