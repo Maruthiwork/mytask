@@ -34,7 +34,7 @@ jobs:
            # git pull origin main
 
             # Pull Docker images and restart containers
-           docker compose up -d
+           docker-compose up -d
 
           #echo "Docker Compose deployment completed."
           EOF
