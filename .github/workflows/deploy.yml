@@ -1,72 +1,32 @@
-name: Deploy to GCP VM using Docker Compose
+name: Deploy to GCP VM
 
 on:
   push:
     branches:
-      - main  # You can replace with any branch you want to trigger on
+      - main  # Trigger deployment when code is pushed to the 'main' branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-  jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Set up SSH key for GCP VM access
-    run: |
-    mkdir -p ~/.ssh
-    echo "${{ secrets.GCP_VM_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-    chmod 600 ~/.ssh/id_rsa
-    touch ~/.ssh/known_hosts
-    ssh-keyscan -H ${{ secrets.GCP_VM_IP }} >> ~/.ssh/known_hosts
-  
-  
-  
-  
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    
-        
-    # Ensure SSH directory exists
-          
-    
-    # Write the private SSH key to id_rsa
-          
-
-    # Set proper permissions for the private key
-          
-
-    # Ensure known_hosts file exists
-         
-
-    # Add the GCP VM's public key fingerprint to known_hosts using ssh-keyscan
-         
-
-    # Optional: Check the SSH connection to make sure it's working
-    ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa username@${{ secrets.GCP_VM_IP }} "echo 'SSH connection successful!'"
-
-      - name: SSH to VM and deploy with Docker Compose
+      - name: Set up SSH key for GCP VM access
         run: |
-          rsync -avz --delete --delete --exclude='.git/' --exclude='.github/' --exclude='node_modules/' --include='.*' --include='*' --prune-empty-dirs -e "ssh -vvv -o StrictHostKeyChecking=no" ./ ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/maruthiwork0009/task/  
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GCP_VM_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          touch ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.GCP_VM_IP }} >> ~/.ssh/known_hosts
 
-          #echo "Deploying to GCP VM..."
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} << 'EOF'
-         
-            # Navigate to your project directory
-            cd /home/maruthiwork0009/task
-          
-            # Pull the latest changes from Git
-           # git pull origin main
-
-            # Pull Docker images and restart containers
-            #docker system prune -af
-           docker-compose up -d 
-
-          #echo "Docker Compose deployment completed."
+      - name: Deploy to GCP VM
+        run: |
+          # Connect to the VM and deploy the code (e.g., copy files, restart services)
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@${{ secrets.GCP_VM_IP }} << 'EOF'
+            cd /path/to/your/application || exit
+            git pull origin main || exit  # Or replace with commands for deployment (e.g., `scp` or `rsync` to transfer files)
+            # Additional deployment commands, e.g., restarting services, installing dependencies
+            sudo systemctl restart your-service-name || exit
           EOF
-        env:
-          GCP_VM_USERNAME: ${{ secrets.GCP_VM_USERNAME }}
-          GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
