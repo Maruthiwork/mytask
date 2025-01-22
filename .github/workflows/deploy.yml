@@ -12,13 +12,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Set up SSH key for GCP VM access
         run: |
+    # Ensure SSH directory exists
           mkdir -p ~/.ssh
+    
+    # Write the private SSH key to id_rsa
           echo "${{ secrets.GCP_VM_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+
+    # Set proper permissions for the private key
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.GCP_VM_IP }} >> ~/.ssh/known_hosts  # Optional: adds the VM to known hosts
+
+    # Ensure known_hosts file exists
+          touch ~/.ssh/known_hosts
+
+    # Add the GCP VM's public key fingerprint to known_hosts using ssh-keyscan
+          ssh-keyscan -H ${{ secrets.GCP_VM_IP }} >> ~/.ssh/known_hosts
+
+    # Optional: Check the SSH connection to make sure it's working
+    ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa username@${{ secrets.GCP_VM_IP }} "echo 'SSH connection successful!'"
 
       - name: SSH to VM and deploy with Docker Compose
         run: |
