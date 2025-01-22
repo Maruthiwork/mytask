@@ -21,7 +21,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.GCP_VM_IP }} >> ~/.ssh/known_hosts  # Optional: adds the VM to known hosts
 
       - name: SSH to VM and deploy with Docker Compose
-         run: |
+        run: |
           rsync -avz --delete --delete --exclude='.git/' --exclude='.github/' --exclude='node_modules/' --include='.*' --include='*' --prune-empty-dirs -e "ssh -vvv -o StrictHostKeyChecking=no" ./ ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/maruthiwork0009/task/  
 
           #echo "Deploying to GCP VM..."
