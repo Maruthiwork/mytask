@@ -1,37 +1,37 @@
-name: Deploy to GCP DEV VM
+name: Build & Deploy to AWS
 
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # 1️⃣ Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.4
+      # 2️⃣ AWS Credentials
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          ssh-private-key: ${{ secrets.GCP_VM_SSH_PRIVATE_KEY}}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Sync files to remote server using rsync
+      # 3️⃣ Login to ECR
+      - name: Login to ECR
         run: |
-          rsync -avz --delete --delete --exclude='.git/' --exclude='.github/' --exclude='node_modules/' --include='.*' --include='*' --prune-empty-dirs -e "ssh -vvv -o StrictHostKeyChecking=no" ./ ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }}:/home/maruthiwork0009/task2
-        env:
-          GCP_VM_USERNAME: ${{ secrets.GCP_VM_USERNAME}}
-          GCP_VM_IP: ${{ secrets.GCP_VM_IP }}
-       
+          aws ecr get-login-password --region $AWS_REGION \
+          | docker login --username AWS --password-stdin \
+            ${{ secrets.ECR_REPO }}
 
-      - name: Deploy to GCP VM
+      # 4️⃣ Build & Push Docker Image (SYNCED NAME)
+      - name: Build and Push Image
         run: |
-          # Connect to the VM and deploy the code (e.g., copy files, restart services)
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no user@${{ secrets.GCP_VM_IP }} << 'EOF'
-            cd /path/to/your/application || exit
-            git pull origin main || exit  # Or replace with commands for deployment (e.g., `scp` or `rsync` to transfer files)
-            # Additional deployment commands, e.g., restarting services, installing dependencies
-            sudo systemctl restart your-service-name || exit
-          EOF
+          docker build -t test:latest .
+          docker tag test:latest ${{ secrets.ECR_REPO }}:latest
+          docker push ${{ secrets.ECR_REPO }}:latest
