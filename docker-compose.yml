@@ -1,9 +1,28 @@
-version: "3.9" # Use a compatible version
-
 services:
-  web:
-    build: .
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+
+  backend1:
+    build: ./backend1
+    container_name: backend1
+
+  backend2:
+    build: ./backend2
+    container_name: backend2
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+
     ports:
-      - "70:80" 
+      - "80:80"
+
     volumes:
-      - ./:/usr/share/nginx/html:ro # Mount your application files
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+    depends_on:
+      - frontend
+      - backend1
+      - backend2
