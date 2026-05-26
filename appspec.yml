@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  # Source '/' means copy the entire artifact zip bundle
+  - source: /
+    destination: /var/lib/projects/buziness-web/
+
+hooks:
+  ApplicationStart:
+    - location: scripts/start_containers.sh
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 60
+      runas: root
