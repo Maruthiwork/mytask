@@ -1,9 +1,7 @@
-version: "3.9" # Use a compatible version
-
+version: '3.8'
 services:
   web:
-    build: .
+    image: nginx:alpine
     ports:
-      - "70:80" 
-    volumes:
-      - ./:/usr/share/nginx/html:ro # Mount your application files
+      - "80:80"
+    restart: always
