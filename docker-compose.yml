@@ -1,9 +1,7 @@
-version: "3.9" # Use a compatible version
-
 services:
   web:
-    build: .
+    image: my-web-app:latest
     ports:
-      - "70:80" 
+      - "80:80"
     volumes:
-      - ./:/usr/share/nginx/html:ro # Mount your application files
+      - ./:/usr/share/nginx/html:ro
