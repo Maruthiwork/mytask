@@ -30,7 +30,7 @@ jobs:
         run: |
           # Connect to the VM and deploy the code (e.g., copy files, restart services)
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.GCP_VM_USERNAME }}@${{ secrets.GCP_VM_IP }} << 'EOF'
-            cd /path/to/your/application || exit
+            cd /home/maruthiwork0009/task2
             sudo docker system prune -af
             sudo docker build -t my-web-app:latest .
             sudo docker compose up -d
