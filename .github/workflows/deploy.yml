@@ -1,5 +1,4 @@
 name: Deploy to GCP DEV VM
-
 on:
   push:
     branches:
