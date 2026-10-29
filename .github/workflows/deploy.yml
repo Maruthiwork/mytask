@@ -3,7 +3,7 @@ name: Deploy to GCP DEV VM
 on:
   push:
     branches:
-      - dev
+      - d
 
 jobs:
   deploy:
