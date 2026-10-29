@@ -1,0 +1,13 @@
+
+version: 0.0
+os: ubuntu
+
+files:
+  - source: /
+    destination: /opt/mytask
+
+hooks:
+  AfterInstall:
+    - location: scripts/deploy.sh
+      timeout: 900
+      runas: root
