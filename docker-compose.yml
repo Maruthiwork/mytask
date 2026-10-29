@@ -1,7 +1,8 @@
+
 services:
   web:
+    build: .
     image: my-web-app:latest
     ports:
       - "80:80"
-    volumes:
-      - ./:/usr/share/nginx/html:ro
+    restart: unless-stopped
