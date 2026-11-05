@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "ap-south-1"
+    ECR_URI: "358454003381.dkr.ecr.ap-south-1.amazonaws.com/maruthi-nextjs"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$ECR_URI"
+
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - IMAGE_TAG="${CODEBUILD_RESOLVED_SOURCE_VERSION:0:12}"
+      - if [ -z "$IMAGE_TAG" ]; then IMAGE_TAG="$CODEBUILD_BUILD_NUMBER"; fi
+      - docker build -t "$ECR_URI:$IMAGE_TAG" .
+      - docker tag "$ECR_URI:$IMAGE_TAG" "$ECR_URI:latest"
+      - echo "Pushing images to ECR..."
+      - docker push "$ECR_URI:$IMAGE_TAG"
+      - docker push "$ECR_URI:latest"
+      - echo "$IMAGE_TAG" > image-tag.txt
+
+artifacts:
+  files:
+    - appspec.yml
+    - deploy.sh
+    - compose.yaml
+    - image-tag.txt
