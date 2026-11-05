@@ -1,13 +1,16 @@
-
 version: 0.0
-os: ubuntu
+os: linux
 
 files:
-  - source: /
-    destination: /opt/mytask
+  - source: compose.yaml
+    destination: /opt/maruthi-nextjs
+  - source: deploy.sh
+    destination: /opt/maruthi-nextjs
+  - source: image-tag.txt
+    destination: /opt/maruthi-nextjs
 
 hooks:
   AfterInstall:
-    - location: scripts/deploy.sh
-      timeout: 900
+    - location: deploy.sh
+      timeout: 600
       runas: root
