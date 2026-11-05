@@ -27,5 +27,5 @@ artifacts:
   files:
     - appspec.yml
     - deploy.sh
-    - compose.yaml
+    - docker-compose.yaml
     - image-tag.txt
