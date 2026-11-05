@@ -1,8 +1,6 @@
-
 services:
   web:
-    build: .
-    image: my-web-app:latest
+    image: ${ECR_IMAGE}:${IMAGE_TAG}
     ports:
       - "80:80"
     restart: unless-stopped
