@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: compose.yaml
+  - source: docker-compose.yaml
     destination: /opt/maruthi-nextjs
   - source: deploy.sh
     destination: /opt/maruthi-nextjs
